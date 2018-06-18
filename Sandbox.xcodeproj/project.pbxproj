@@ -16,6 +16,8 @@
 		25B2B1DA20D7D72900081306 /* UILayerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B2B1D620D7D72900081306 /* UILayerObject.swift */; };
 		25B2B1DB20D7D72900081306 /* UIPhotoEditorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25B2B1D720D7D72900081306 /* UIPhotoEditorViewController.xib */; };
 		25B2B1DC20D7D72900081306 /* UIBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B2B1D820D7D72900081306 /* UIBorderButton.swift */; };
+		25B2B1E120D7DFDF00081306 /* LayerImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 25B2B1DF20D7DFDF00081306 /* LayerImage.png */; };
+		25B2B1E220D7DFDF00081306 /* BackgroundImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 25B2B1E020D7DFDF00081306 /* BackgroundImage.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		25B2B1D620D7D72900081306 /* UILayerObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILayerObject.swift; sourceTree = "<group>"; };
 		25B2B1D720D7D72900081306 /* UIPhotoEditorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIPhotoEditorViewController.xib; sourceTree = "<group>"; };
 		25B2B1D820D7D72900081306 /* UIBorderButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIBorderButton.swift; sourceTree = "<group>"; };
+		25B2B1DF20D7DFDF00081306 /* LayerImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LayerImage.png; sourceTree = "<group>"; };
+		25B2B1E020D7DFDF00081306 /* BackgroundImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundImage.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,7 @@
 				254C19CA20D7D49F00387D0E /* ViewController.swift */,
 				254C19CC20D7D49F00387D0E /* Main.storyboard */,
 				25B2B1D420D7D72900081306 /* PhotoEditor */,
+				25B2B1DE20D7DFDF00081306 /* Images */,
 				254C19CF20D7D4A000387D0E /* Assets.xcassets */,
 				254C19D120D7D4A000387D0E /* LaunchScreen.storyboard */,
 				254C19D420D7D4A000387D0E /* Info.plist */,
@@ -77,11 +82,20 @@
 			isa = PBXGroup;
 			children = (
 				25B2B1D520D7D72900081306 /* UIPhotoEditorViewController.swift */,
+				25B2B1D720D7D72900081306 /* UIPhotoEditorViewController.xib */,
 				25B2B1D620D7D72900081306 /* UILayerObject.swift */,
 				25B2B1D820D7D72900081306 /* UIBorderButton.swift */,
-				25B2B1D720D7D72900081306 /* UIPhotoEditorViewController.xib */,
 			);
 			path = PhotoEditor;
+			sourceTree = "<group>";
+		};
+		25B2B1DE20D7DFDF00081306 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				25B2B1DF20D7DFDF00081306 /* LayerImage.png */,
+				25B2B1E020D7DFDF00081306 /* BackgroundImage.png */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,9 +157,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				254C19D320D7D4A000387D0E /* LaunchScreen.storyboard in Resources */,
+				25B2B1E120D7DFDF00081306 /* LayerImage.png in Resources */,
 				254C19D020D7D4A000387D0E /* Assets.xcassets in Resources */,
 				25B2B1DB20D7D72900081306 /* UIPhotoEditorViewController.xib in Resources */,
 				254C19CE20D7D49F00387D0E /* Main.storyboard in Resources */,
+				25B2B1E220D7DFDF00081306 /* BackgroundImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

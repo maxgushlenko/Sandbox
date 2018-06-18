@@ -23,11 +23,9 @@ class UILayerObject: UIView, UIBorderButtonDelegate {
     var state: LayerObjectState = .active
     var blockRotationAndResizing = false
     var isInstalled = false
-    var deltaAngle: CGFloat = 0
+    
     var firstLocation: CGPoint = CGPoint.zero
     var firstAngle: CGFloat = 0.0
-    var touchPointLocation: CGPoint = CGPoint.zero
-    var currentAngel: CGFloat = 0.0
     var firstTransform: CGAffineTransform = CGAffineTransform.identity
     var firstVector: CGPoint = CGPoint.zero
     
@@ -250,58 +248,70 @@ class UILayerObject: UIView, UIBorderButtonDelegate {
     // MARK: - Touch responder part
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-//        if state == .inactive {
-//            changeState(.active)
-//        }
-        //
+        /*
+         При первом касании к картинке если рамка не активная - делаем её активной.
+         */
+        if state == .inactive {
+            changeState(.active)
+        }
         
         let touch: UITouch = touches.first!
+        
+        /*
+         Данные, которые нобходимо запомнить при первом касании к картинке. Они понадобятся для расчётов далее, когда начнём двыгать палец.
+         */
+        
         firstLocation = touch.location(in: self.superview)
         firstAngle = angleForVectorFromCenterTo(firstLocation)
         firstTransform = self.transform
         firstVector = CGPoint(x: firstLocation.x - self.center.x, y: firstLocation.y - self.center.y)
-
-        print("msg___ \(self.center)")
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        /*
+         Обработка для круглых кнопок (scale, rotate).
+         */
         if selectedBorderButton != nil && selectedBorderButton?.style == .circle && isInstalled == false && state == .active {
             
             let touch: UITouch = touches.first!
-            
             let currentLocation = touch.location(in: self.superview)
             
-            let currentVector = CGPoint(x: currentLocation.x - self.center.x, y: currentLocation.y - self.center.y)
-            let currentLenght = sqrt(currentVector.x * currentVector.x + currentVector.y * currentVector.y)
+            /*
+             Считаем разницу в длинне между первым и вторым вектором. Так мы узнаем на сколько нужно cкейлить картинку.
+             */
+            let secondVector = CGPoint(x: currentLocation.x - self.center.x, y: currentLocation.y - self.center.y)
+            let secondVectorLenght = sqrt(secondVector.x * secondVector.x + secondVector.y * secondVector.y)
             
-            let firstLenght = sqrt(firstVector.x * firstVector.x + firstVector.y * firstVector.y)
+            let firstVectorLenght = sqrt(firstVector.x * firstVector.x + firstVector.y * firstVector.y)
             
-            let delta = currentLenght / firstLenght
-            let currentAngle = angleForVectorFromCenterTo(currentLocation)
+            let delta = secondVectorLenght / firstVectorLenght
             
-            let calculatedAngle = currentAngle - firstAngle
+            /*
+             Считаем угл между первым и вторым вектором. Так мы узнаем на сколько нужно повернуть картинку.
+             */
             
-            let scaleValue = delta
+            let secondAngle = angleForVectorFromCenterTo(currentLocation)
+            let delta2 = secondAngle - firstAngle
             
-            var transform = firstTransform.rotated(by: calculatedAngle)
-            var transformScaled = transform.scaledBy(x: scaleValue, y: scaleValue)
+            /*
+             Теперь полученные переменные задаем в CGAffineTransform.
+             */
+            let transform = firstTransform.rotated(by: delta2)
+            let transformScaled = transform.scaledBy(x: delta, y: delta)
             self.transform = transformScaled
-            
-//            print("msg___ \(transform)")
-            print("msg___ \(self.frame) v: \(firstVector)")
         }
     }
     
+    /*
+     Начальная точка вектора для scale и rotate начинается с центра картинки.
+     */
     private func angleForVectorFromCenterTo(_ point: CGPoint) -> CGFloat{
         
         let x: CGFloat = self.center.x - point.x
         let y: CGFloat = self.center.y - point.y
 
         let angle: CGFloat = atan2(y, x)
-//        if angle < 0 {
-//            angle = CGFloat.pi * 2 + angle
-//        }
         
         return angle
     }

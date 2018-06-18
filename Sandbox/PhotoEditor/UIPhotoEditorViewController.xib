@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UIPhotoEditorViewController" customModule="SwiftLearning" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UIPhotoEditorViewController" customModule="Sandbox" customModuleProvider="target">
             <connections>
                 <outlet property="aScrollView" destination="SRf-bC-oPH" id="FvL-9y-nzy"/>
                 <outlet property="imageView" destination="XGz-wN-TnB" id="IvW-MD-p7J"/>
@@ -23,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="10" translatesAutoresizingMaskIntoConstraints="NO" id="SRf-bC-oPH">
-                    <rect key="frame" x="40" y="110" width="294" height="446"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <color key="backgroundColor" red="0.92879157110091748" green="0.93029673165137616" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                 </scrollView>
                 <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XGz-wN-TnB">
@@ -34,12 +34,12 @@
             <constraints>
                 <constraint firstItem="XGz-wN-TnB" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="40y-K2-iQ7"/>
                 <constraint firstItem="XGz-wN-TnB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="9jP-W4-Xzy"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="SRf-bC-oPH" secondAttribute="bottom" constant="111" id="Auf-yT-PkZ"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="SRf-bC-oPH" secondAttribute="bottom" id="Auf-yT-PkZ"/>
                 <constraint firstItem="XGz-wN-TnB" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="Og0-gj-ZqA"/>
                 <constraint firstItem="XGz-wN-TnB" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="Tct-t3-acy"/>
-                <constraint firstItem="SRf-bC-oPH" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="40" id="eTW-w0-kff"/>
-                <constraint firstItem="SRf-bC-oPH" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="90" id="fYO-QC-Ma6"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="SRf-bC-oPH" secondAttribute="trailing" constant="41" id="x1I-je-XJi"/>
+                <constraint firstItem="SRf-bC-oPH" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="eTW-w0-kff"/>
+                <constraint firstItem="SRf-bC-oPH" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="-20" id="fYO-QC-Ma6"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="SRf-bC-oPH" secondAttribute="trailing" id="x1I-je-XJi"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="34.5" y="53.5"/>

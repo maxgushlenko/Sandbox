@@ -19,7 +19,7 @@ class UIPhotoEditorViewController: UIViewController, UIScrollViewDelegate, UIGes
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        imageView.image = UIImage(named: "bg.jpg")
+        imageView.image = UIImage(named: "BackgroundImage.png")
         imageView.isUserInteractionEnabled = true
         setupScrollView()
         
@@ -29,7 +29,7 @@ class UIPhotoEditorViewController: UIViewController, UIScrollViewDelegate, UIGes
         layerObject = UILayerObject(frame: centerRect)
         view.addSubview(layerObject)
         layerObject.prepare()
-        layerObject.imageView.image = UIImage(named: "Unknown.png")
+        layerObject.imageView.image = UIImage(named: "LayerImage.png")
         
         let scrollViewTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(scrollViewTapped(_:)))
         scrollViewTapGestureRecognizer.numberOfTapsRequired = 1

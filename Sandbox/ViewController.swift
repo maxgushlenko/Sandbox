@@ -20,6 +20,11 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        let photoEditor = UIPhotoEditorViewController(nibName: "UIPhotoEditorViewController", bundle: nil)
+        addChildViewController(photoEditor)
+        view.addSubview(photoEditor.view)
+    }
 
 }
 
