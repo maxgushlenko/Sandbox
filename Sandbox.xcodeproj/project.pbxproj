@@ -12,6 +12,10 @@
 		254C19CE20D7D49F00387D0E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 254C19CC20D7D49F00387D0E /* Main.storyboard */; };
 		254C19D020D7D4A000387D0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 254C19CF20D7D4A000387D0E /* Assets.xcassets */; };
 		254C19D320D7D4A000387D0E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 254C19D120D7D4A000387D0E /* LaunchScreen.storyboard */; };
+		25B2B1D920D7D72900081306 /* UIPhotoEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B2B1D520D7D72900081306 /* UIPhotoEditorViewController.swift */; };
+		25B2B1DA20D7D72900081306 /* UILayerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B2B1D620D7D72900081306 /* UILayerObject.swift */; };
+		25B2B1DB20D7D72900081306 /* UIPhotoEditorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25B2B1D720D7D72900081306 /* UIPhotoEditorViewController.xib */; };
+		25B2B1DC20D7D72900081306 /* UIBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B2B1D820D7D72900081306 /* UIBorderButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +26,10 @@
 		254C19CF20D7D4A000387D0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		254C19D220D7D4A000387D0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		254C19D420D7D4A000387D0E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		25B2B1D520D7D72900081306 /* UIPhotoEditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPhotoEditorViewController.swift; sourceTree = "<group>"; };
+		25B2B1D620D7D72900081306 /* UILayerObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILayerObject.swift; sourceTree = "<group>"; };
+		25B2B1D720D7D72900081306 /* UIPhotoEditorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIPhotoEditorViewController.xib; sourceTree = "<group>"; };
+		25B2B1D820D7D72900081306 /* UIBorderButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIBorderButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,11 +65,23 @@
 				254C19C820D7D49F00387D0E /* AppDelegate.swift */,
 				254C19CA20D7D49F00387D0E /* ViewController.swift */,
 				254C19CC20D7D49F00387D0E /* Main.storyboard */,
+				25B2B1D420D7D72900081306 /* PhotoEditor */,
 				254C19CF20D7D4A000387D0E /* Assets.xcassets */,
 				254C19D120D7D4A000387D0E /* LaunchScreen.storyboard */,
 				254C19D420D7D4A000387D0E /* Info.plist */,
 			);
 			path = Sandbox;
+			sourceTree = "<group>";
+		};
+		25B2B1D420D7D72900081306 /* PhotoEditor */ = {
+			isa = PBXGroup;
+			children = (
+				25B2B1D520D7D72900081306 /* UIPhotoEditorViewController.swift */,
+				25B2B1D620D7D72900081306 /* UILayerObject.swift */,
+				25B2B1D820D7D72900081306 /* UIBorderButton.swift */,
+				25B2B1D720D7D72900081306 /* UIPhotoEditorViewController.xib */,
+			);
+			path = PhotoEditor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,6 +144,7 @@
 			files = (
 				254C19D320D7D4A000387D0E /* LaunchScreen.storyboard in Resources */,
 				254C19D020D7D4A000387D0E /* Assets.xcassets in Resources */,
+				25B2B1DB20D7D72900081306 /* UIPhotoEditorViewController.xib in Resources */,
 				254C19CE20D7D49F00387D0E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,7 +156,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25B2B1DA20D7D72900081306 /* UILayerObject.swift in Sources */,
 				254C19CB20D7D49F00387D0E /* ViewController.swift in Sources */,
+				25B2B1DC20D7D72900081306 /* UIBorderButton.swift in Sources */,
+				25B2B1D920D7D72900081306 /* UIPhotoEditorViewController.swift in Sources */,
 				254C19C920D7D49F00387D0E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
