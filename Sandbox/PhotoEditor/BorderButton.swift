@@ -31,14 +31,14 @@ enum BorderButtonState {
     case minimized
 }
 
-protocol UIBorderButtonDelegate {
-    func didTouched(_ button: UIBorderButton)
-    func didUntouched(_ button: UIBorderButton)
+protocol BorderButtonDelegate {
+    func didTouched(_ button: BorderButton)
+    func didUntouched(_ button: BorderButton)
 }
 
-class UIBorderButton: UIView {
+class BorderButton: UIView {
     
-    var delegate: UIBorderButtonDelegate?
+    var delegate: BorderButtonDelegate?
     var touched: Bool = false
     var position: BorderButtonPosition = .undefined
     var style: BorderButtonStyle = .circle {
@@ -60,8 +60,8 @@ class UIBorderButton: UIView {
                                                             .square : CGSize(width: 4, height: 4)]
     
     // MARK: - Public method's
-    class func create(position: BorderButtonPosition, style: BorderButtonStyle) -> UIBorderButton {
-        let button = UIBorderButton(frame: CGRect(x: 0, y: 0, width: 35, height: 35))
+    class func create(position: BorderButtonPosition, style: BorderButtonStyle) -> BorderButton {
+        let button = BorderButton(frame: CGRect(x: 0, y: 0, width: 35, height: 35))
         button.position = position
         button.style = style
         
@@ -130,7 +130,7 @@ class UIBorderButton: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         let touch: UITouch = touches.first!
-        let button = touch.view as! UIBorderButton
+        let button = touch.view as! BorderButton
         button.touched = true
         delegate?.didTouched(button)
         
@@ -144,7 +144,7 @@ class UIBorderButton: UIView {
         setState(.normal)
         
         let touch: UITouch = touches.first!
-        let button = touch.view as! UIBorderButton
+        let button = touch.view as! BorderButton
         button.touched = false
         delegate?.didUntouched(button)
         
@@ -156,7 +156,7 @@ class UIBorderButton: UIView {
         setState(.normal)
         
         let touch: UITouch = touches.first!
-        let button = touch.view as! UIBorderButton
+        let button = touch.view as! BorderButton
         button.touched = false
         delegate?.didUntouched(button)
         
