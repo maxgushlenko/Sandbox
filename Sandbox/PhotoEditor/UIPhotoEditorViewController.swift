@@ -13,7 +13,7 @@ class UIPhotoEditorViewController: UIViewController, UIScrollViewDelegate, UIGes
     @IBOutlet var imageView : UIImageView!
     @IBOutlet var aScrollView : UIScrollView!
     
-    var layerObject: Container!
+    var layerObject: LayerObject!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +26,8 @@ class UIPhotoEditorViewController: UIViewController, UIScrollViewDelegate, UIGes
         let size: CGFloat = 200
         let centerRect = CGRect(x: view.frame.size.width / 2 - size / 2, y: view.frame.size.height / 2 - size / 2, width: size, height: size)
         
-        layerObject = Container(frame: centerRect)
+        layerObject = LayerObject.create(centerRect, imageName: "LayerImage.png")
         view.addSubview(layerObject)
-        layerObject.prepare()
-        layerObject.imageView.image = UIImage(named: "LayerImage.png")
         
         let scrollViewTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(scrollViewTapped(_:)))
         scrollViewTapGestureRecognizer.numberOfTapsRequired = 1
@@ -55,7 +53,7 @@ class UIPhotoEditorViewController: UIViewController, UIScrollViewDelegate, UIGes
         /*
          Убираем активное состояние с слоя.
          */
-        layerObject.changeState(.inactive)
+        layerObject.container.changeState(.inactive)
     }
     
     // MARK: - UIScrollViewDelegate

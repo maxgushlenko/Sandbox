@@ -129,10 +129,8 @@ class BorderButton: UIView {
     // MARK: -
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        let touch: UITouch = touches.first!
-        let button = touch.view as! BorderButton
-        button.touched = true
-        delegate?.didTouched(button)
+        self.touched = true
+        delegate?.didTouched(self)
         
         setState(.selected)
         
@@ -143,10 +141,8 @@ class BorderButton: UIView {
         
         setState(.normal)
         
-        let touch: UITouch = touches.first!
-        let button = touch.view as! BorderButton
-        button.touched = false
-        delegate?.didUntouched(button)
+        self.touched = false
+        delegate?.didUntouched(self)
         
         super.touchesCancelled(touches, with: event)
     }
@@ -155,10 +151,8 @@ class BorderButton: UIView {
         
         setState(.normal)
         
-        let touch: UITouch = touches.first!
-        let button = touch.view as! BorderButton
-        button.touched = false
-        delegate?.didUntouched(button)
+        self.touched = false
+        delegate?.didUntouched(self)
         
         super.touchesEnded(touches, with: event)
     }
