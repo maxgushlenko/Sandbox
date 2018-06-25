@@ -10,28 +10,41 @@ import UIKit
 
 private let borderWidth: CGFloat = 1.4
 
-enum LayerObjectState {
+enum  LayerContainerState {
     case active
     case inactive
     case installed
 }
 
 class Container: UIView, BorderButtonDelegate {
-
-    var borderButtons = NSMutableArray()
-    var borderView: UIView!
+    
     var imageView: UIImageView!
+    
+    var borderView: UIView!
+    var borderButtons = NSMutableArray()
     var selectedBorderButton: BorderButton?
-    var state: LayerObjectState = .active
-    var blockRotationAndResizing = false
+    
+    var state: LayerContainerState = .active
+    var blockRotationAndResizing = false        // ??
     var isInstalled = false
     
-    var firstLocation: CGPoint = CGPoint.zero
-    var firstAngle: CGFloat = 0.0
-    var firstTransform: CGAffineTransform = CGAffineTransform.identity
-    var firstButtonTransform: CGAffineTransform = CGAffineTransform.identity
-    var firstVector: CGPoint = CGPoint.zero
+    /*
+     Переменные для расчётов.
+     */
+    var firstTouchLocation: CGPoint!
     var firstFrame: CGRect!
+    
+    var firstVector: CGPoint!
+    var firstVectorAngle: CGFloat!
+    
+    var mainTransform: CGAffineTransform = CGAffineTransform.identity
+    var selfTransform: CGAffineTransform = CGAffineTransform.identity
+    var borderButtonTransform: CGAffineTransform = CGAffineTransform.identity
+    
+    
+    var bezierPaths: NSMutableArray = NSMutableArray()
+    
+    
     
     // MARK: - Public method's
     func prepare() {
@@ -40,30 +53,22 @@ class Container: UIView, BorderButtonDelegate {
         recalculateBorderPosition()
     }
     
+    func setImage(_ image: UIImage) {
+        imageView.image = image
+    }
+    
     private func setupImageView () {
         imageView = UIImageView(frame: borderView.bounds)
         borderView.addSubview(imageView)
         
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(changePositionGesture))
         imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(panGesture)
         imageView.contentMode = .scaleToFill
         
         let pinchGesture = UIPinchGestureRecognizer.init(target: self, action: #selector(pinch(_:)))
         self.addGestureRecognizer(pinchGesture)
     }
-
-    @objc private func changePositionGesture (_ sender: UIPanGestureRecognizer) {
-        if state == .active && (sender.state == .began || sender.state == .changed) {
-            let translation = sender.translation(in: self.superview)
-            let changeX = self.center.x + translation.x
-            let changeY = self.center.y + translation.y
-            self.center = CGPoint(x: changeX, y: changeY)
-            sender.setTranslation(CGPoint.zero, in: self.superview)
-        }
-    }
     
-    func changeState(_ newState: LayerObjectState) {
+    func changeState(_ newState: LayerContainerState) {
         state = newState
         
         switch newState {
@@ -127,7 +132,7 @@ class Container: UIView, BorderButtonDelegate {
     
     private func createBorder () {
         borderButtons.removeAllObjects()
-//        self.backgroundColor = UIColor.orange
+        
         /*
          Верхние кнопки
          */
@@ -245,49 +250,30 @@ class Container: UIView, BorderButtonDelegate {
      */
     private func angleForVectorFromCenterTo(_ point: CGPoint) -> CGFloat{
         
-        let x: CGFloat = self.center.x - point.x
-        let y: CGFloat = self.center.y - point.y
+        let x: CGFloat = self.superview!.center.x - point.x
+        let y: CGFloat = self.superview!.center.y - point.y
         
         let angle: CGFloat = atan2(y, x)
         
         return angle
     }
     
-    @objc func pinch(_ gesture: UIPinchGestureRecognizer) {
-        if let view = gesture.view {
-            
-            switch gesture.state {
-            case .changed:
-                let pinchCenter = CGPoint(x: gesture.location(in: view).x - view.bounds.midX,
-                                          y: gesture.location(in: view).y - view.bounds.midY)
-                
-                let transform = view.transform.translatedBy(x: pinchCenter.x, y: pinchCenter.y)
-                .scaledBy(x: gesture.scale, y: gesture.scale)
-                .translatedBy(x: -pinchCenter.x, y: -pinchCenter.y)
-                self.transform = firstTransform
-                
-                gesture.scale = 1
-                
-            default:
-                return
-            }
-        }
-    }
-    
     // MARK: - BorderButtonDelegate
     func didTouched(_ button: BorderButton) {
-        minimizeBorderButtons(true)
         selectedBorderButton = button
+        minimizeBorderButtons(true)
     }
     
     func didUntouched(_ button: BorderButton) {
-        minimizeBorderButtons(false)
         selectedBorderButton = nil
+        minimizeBorderButtons(false)
     }
     
-    // MARK: - Touch responder part
+    // MARK: - UIResponder
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
+        
+        let touch: UITouch = touches.first!
         
         /*
          При первом касании к картинке если рамка не активная - делаем её активной.
@@ -296,28 +282,58 @@ class Container: UIView, BorderButtonDelegate {
             changeState(.active)
         }
         
-        let touch: UITouch = touches.first!
-        
         /*
-         Данные, которые нобходимо запомнить при первом касании к картинке. Они понадобятся для расчётов далее, когда начнём двыгать палец.
+         Данные, которые нобходимо запомнить при первом касании к кнопке. Они понадобятся для расчётов далее, когда начнём двыгать палец.
          */
         
-        firstLocation = touch.location(in: self.superview)
-        firstAngle = angleForVectorFromCenterTo(firstLocation)
-        firstTransform = self.superview!.transform
-        print("msg___ tap 1: \(firstButtonTransform)")
-        firstButtonTransform = (borderButtons.firstObject as! BorderButton).transform
-        print("msg___ tap 2: \(firstButtonTransform)")
-        firstVector = CGPoint(x: firstLocation.x - self.center.x, y: firstLocation.y - self.center.y)
         firstFrame = self.frame
-//        self.layer.anchorPoint = CGPoint(x: 0, y: 0.5)
-//        self.frame = CGRect(x: self.frame.origin.x - self.frame.width / 2, y: self.frame.origin.y, width: self.frame.width, height: self.frame.height)
+        
+        firstTouchLocation = touch.location(in: self.superview!.superview)
+        firstVectorAngle = angleForVectorFromCenterTo(firstTouchLocation)
+        mainTransform = self.superview!.transform
+        selfTransform = self.transform
+        borderButtonTransform = (borderButtons.firstObject as! BorderButton).transform
+        firstVector = calculateVectorWith(firstTouchLocation)
+    }
+    
+    private func calculateVectorWith(_ endPoint: CGPoint) -> CGPoint {
+        
+        var x: CGFloat = 0
+        var y: CGFloat = 0
+        
+        guard let button = selectedBorderButton else {
+            return CGPoint(x: x, y: y)
+        }
+        
+        switch button.position {
+            
+        /*
+         Круглые кнопки (rotate, scale).
+         */
+        case .topLeft, .topRight, .bottomLeft, .bottomRight:
+            x = endPoint.x - self.superview!.center.x
+            y = endPoint.y - self.superview!.center.y
+            break
+            
+        /*
+         Квадратные кнопки (width, height).
+         */
+        case .centerRight:
+            x = endPoint.x - self.superview!.frame.origin.x
+            y = endPoint.y - self.superview!.frame.origin.y
+            break
+            
+        default:
+            break
+        }
+        
+        return CGPoint(x: x, y: y)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         let touch: UITouch = touches.first!
-        let currentLocation = touch.location(in: self.superview)
+        let currentLocation = touch.location(in: self.superview!.superview)
         
         /*
          Обработка для круглых кнопок (scale, rotate).
@@ -325,46 +341,146 @@ class Container: UIView, BorderButtonDelegate {
         if selectedBorderButton != nil && selectedBorderButton?.style == .circle && isInstalled == false && state == .active {
             
             /*
-             Считаем разницу в длинне между первым и вторым вектором. Так мы узнаем на сколько нужно cкейлить картинку.
+             Считаем векторы.
              */
-            let secondVector = CGPoint(x: currentLocation.x - self.center.x, y: currentLocation.y - self.center.y)
-            let secondVectorLenght = sqrt(secondVector.x * secondVector.x + secondVector.y * secondVector.y)
-            
             let firstVectorLenght = sqrt(firstVector.x * firstVector.x + firstVector.y * firstVector.y)
             
-            let delta = secondVectorLenght / firstVectorLenght
-            let deltaInverted = firstVectorLenght / secondVectorLenght
+            let secondVector = calculateVectorWith(currentLocation)
+            let secondVectorLenght = sqrt(secondVector.x * secondVector.x + secondVector.y * secondVector.y)
+            
             /*
              Считаем угл между первым и вторым вектором. Так мы узнаем на сколько нужно повернуть картинку.
              */
+            let deltaScale = secondVectorLenght / firstVectorLenght
             
-            let secondAngle = angleForVectorFromCenterTo(currentLocation)
-            let delta2 = secondAngle - firstAngle
+            /*
+             Считаем разницу в длинне между первым и вторым вектором. Так мы узнаем на сколько нужно cкейлить картинку.
+             */
+            let secondVectorAngle = angleForVectorFromCenterTo(currentLocation)
+            let deltaRotate = secondVectorAngle - firstVectorAngle
             
             /*
              Теперь полученные переменные задаем в CGAffineTransform.
              */
-            let transformRotate = firstTransform.rotated(by: delta2)
-            let transformScaled = transformRotate.scaledBy(x: delta, y: delta)
+            let transformRotate = mainTransform.rotated(by: deltaRotate)
+            let transformScale = transformRotate.scaledBy(x: deltaScale, y: deltaScale)
             
-            
-            self.superview?.transform = transformScaled
+            self.superview!.transform = transformScale
             
             /*
-             Отменяем скейл и поворот для кнопок рамки.
+             Отменяем скейл для кнопок потому, что они не должны увеличиватся вместе с картинкой. По сути - просто инвертируем скейла delta.
              */
+            let deltaScaleInverted = firstVectorLenght / secondVectorLenght
+            
             for button in borderButtons {
-                let buttonObject = button as! BorderButton
-                
-//                let transformScaledInvert = self.transform.inverted()
-//                let rotateTransform = transformScaledInvert.rotated(by: delta2)
-//
-                
-                buttonObject.transform = firstButtonTransform.scaledBy(x: deltaInverted, y: deltaInverted)
-                
-                
+                (button as! BorderButton).transform = borderButtonTransform.scaledBy(x: deltaScaleInverted, y: deltaScaleInverted)
             }
             
+            drawLineFromPoint(start: firstVector, toPoint: secondVector, ofColor: UIColor.yellow, inView: self)
+            
+            return
+        }
+        
+        /*
+         Обработка для квадратных кнопок (height, width).
+         */
+        if selectedBorderButton != nil && selectedBorderButton?.style == .square && isInstalled == false && state == .active {
+            
+            /*
+             Считаем векторы.
+             */
+            let firstVectorLenght = sqrt(firstVector.x * firstVector.x + firstVector.y * firstVector.y)
+
+            let secondVector = calculateVectorWith(currentLocation)
+            let secondVectorLenght = sqrt(secondVector.x * secondVector.x + secondVector.y * secondVector.y)
+            
+            let deltaDistance = secondVectorLenght - firstVectorLenght
+            
+//            self.frame = CGRect(x: firstFrame.origin.x, y: firstFrame.origin.y, width: firstFrame.width + deltaDistance, height: firstFrame.height)
+//
+//            recalculateBorderPosition()
+            
+            //
+            
+            let deltaScale = secondVectorLenght / firstVectorLenght
+            
+            let transformTranslation = selfTransform.translatedBy(x: -deltaScale, y: 0)
+            let transformScale = transformTranslation.scaledBy(x: deltaScale, y: 1)
+            
+            self.transform = transformScale
+            
+            /*
+             Отменяем скейл для кнопок потому, что они не должны увеличиватся вместе с картинкой. По сути - просто инвертируем скейла delta.
+             */
+            let deltaScaleInverted = firstVectorLenght / secondVectorLenght
+            
+            for button in borderButtons {
+                (button as! BorderButton).transform = borderButtonTransform.scaledBy(x: deltaScaleInverted, y: deltaScaleInverted)
+            }
+            
+            drawLineFromPoint(start: firstVector, toPoint: secondVector, ofColor: UIColor.yellow, inView: self)
+            
+            return
+        }
+    }
+    
+    // MARK: - UIGestureRecognizer
+    @objc func pinch(_ gesture: UIPinchGestureRecognizer) {
+        
+        /*
+         Пока отключил. Проблема в том, что тут нужно реализовать прямо пропорциональный скейл BorderButton's, чтобы они всегда были одного размера. Это уже реализовано, но не тут.
+         */
+        
+        //        if let view = gesture.view {
+        //
+        //            switch gesture.state {
+        //            case .changed:
+        //                let pinchCenter = CGPoint(x: gesture.location(in: view).x - view.bounds.midX,
+        //                                          y: gesture.location(in: view).y - view.bounds.midY)
+        //
+        //                let translate = mainTransform.translatedBy(x: pinchCenter.x, y: pinchCenter.y)
+        //                let scale = translate.scaledBy(x: gesture.scale, y: gesture.scale)
+        //                let compensationTranslate = scale.translatedBy(x: -pinchCenter.x, y: -pinchCenter.y)
+        //                mainTransform = compensationTranslate
+        //                self.superview!.transform = mainTransform
+        //
+        //                for button in borderButtons {
+        //                    (button as! BorderButton).transform = borderButtonTransform.scaledBy(x: -gesture.scale, y: -gesture.scale)
+        //                }
+        //
+        //                gesture.scale = 1
+        //                print("msg___ scale: \(gesture.scale) ")
+        //            default:
+        //                return
+        //            }
+        //        }
+    }
+    
+    func drawLineFromPoint(start : CGPoint, toPoint end:CGPoint, ofColor lineColor: UIColor, inView view:UIView) {
+        
+        if bezierPaths.count > 10 {
+            let object: CAShapeLayer = bezierPaths.object(at: 0) as! CAShapeLayer
+            object.removeFromSuperlayer()
+            bezierPaths.removeObject(at: 0)
+        }
+        
+        //design the path
+        let path = UIBezierPath()
+        path.move(to: start)
+        path.addLine(to: end)
+        
+        //design path in layer
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.path = path.cgPath
+        shapeLayer.strokeColor = lineColor.cgColor
+        shapeLayer.lineWidth = 1.0
+        
+        view.layer.addSublayer(shapeLayer)
+        bezierPaths.add(shapeLayer)
+    }
+    /*
+     Код, который может пригодится при расчётах в ширине обода рамки.
+      */
 //            let xScale = sqrt(self.transform.a * self.transform.a + self.transform.c * self.transform.c)
 //            let yScale = sqrt(self.transform.b * self.transform.b + self.transform.d * self.transform.d)
 //
@@ -372,47 +488,6 @@ class Container: UIView, BorderButtonDelegate {
 //            let percentage = borderWidth/self.frame.size.width * 100
 //            let newBorderWidth = delta > 1 ? borderWidth/delta : borderWidth + 1 * delta
 //            let calculatedBorderWidth = newBorderWidth > borderWidth ? borderWidth : newBorderWidth
-            
-//             borderView.layer.borderWidth = calculatedBorderWidth
-            
-//            print("msg___ delta     : \(delta)")
-//            print("msg___ percentage: \(percentage)")
-//            print("msg___ xScale: \(xScale) yScale: \(yScale) delta: \(delta)")
-            
-        } else if selectedBorderButton != nil && selectedBorderButton?.style == .square && isInstalled == false && state == .active {
-            /*
-             Обработка для квадратных кнопок (height, width).
-             */
-            
-            /*
-             Считаем разницу в длинне между первым и вторым вектором. Так мы узнаем на сколько нужно cкейлить картинку.
-             */
-            let secondVector = CGPoint(x: currentLocation.x - self.center.x, y: currentLocation.y - self.center.y)
-            let secondVectorLenght = sqrt(secondVector.x * secondVector.x + secondVector.y * secondVector.y)
-            
-            let firstVectorLenght = sqrt(firstVector.x * firstVector.x + firstVector.y * firstVector.y)
-            
-            let deltaDistance = secondVectorLenght - firstVectorLenght
-            
-            recalculateBorderPosition()
-            
-            self.frame = CGRect(x: firstFrame.origin.x, y: firstFrame.origin.y, width: firstFrame.width + deltaDistance, height: firstFrame.height)
-        }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-    }
-    
-    // MARK: -
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        imageView.frame = bounds
-    }
+
+//            borderView.layer.borderWidth = calculatedBorderWidth
 }
