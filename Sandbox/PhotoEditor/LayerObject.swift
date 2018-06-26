@@ -21,8 +21,8 @@ class LayerObject: UIView {
         let image = UIImage(named: imageName)
         layerObject.container.setImage(image!)
         
-//        layerObject.container.backgroundColor = UIColor.orange
-        layerObject.backgroundColor = UIColor.red
+        layerObject.container.backgroundColor = UIColor.purple
+        layerObject.backgroundColor = UIColor.black
         
         return layerObject
     }

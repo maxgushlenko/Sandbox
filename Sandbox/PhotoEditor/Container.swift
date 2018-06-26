@@ -31,19 +31,18 @@ class Container: UIView, BorderButtonDelegate {
     /*
      Переменные для расчётов.
      */
-    var firstTouchLocation: CGPoint!
+    var firstTouchInSuperview: CGPoint!
+    var firstTouchInSelf: CGPoint!
     var firstFrame: CGRect!
     
     var firstVector: CGPoint!
     var firstVectorAngle: CGFloat!
     
     var mainTransform: CGAffineTransform = CGAffineTransform.identity
-    var selfTransform: CGAffineTransform = CGAffineTransform.identity
     var borderButtonTransform: CGAffineTransform = CGAffineTransform.identity
     
     
     var bezierPaths: NSMutableArray = NSMutableArray()
-    
     
     
     // MARK: - Public method's
@@ -258,6 +257,40 @@ class Container: UIView, BorderButtonDelegate {
         return angle
     }
     
+    private func calculateVectorWith(_ endPoint: CGPoint) -> CGPoint {
+        
+        var x: CGFloat = 0
+        var y: CGFloat = 0
+        
+        guard let button = selectedBorderButton else {
+            return CGPoint(x: x, y: y)
+        }
+        
+        switch button.position {
+            
+            /*
+             Круглые кнопки (rotate, scale).
+             */
+        case .topLeft, .topRight, .bottomLeft, .bottomRight:
+            x = endPoint.x - self.superview!.center.x
+            y = endPoint.y - self.superview!.center.y
+            break
+            
+            /*
+             Квадратные кнопки (width, height).
+             */
+        case .centerRight:
+            x = -self.frame.size.width - endPoint.x
+            y = self.frame.size.height / 2
+            break
+            
+        default:
+            break
+        }
+        
+        return CGPoint(x: x, y: y)
+    }
+    
     // MARK: - BorderButtonDelegate
     func didTouched(_ button: BorderButton) {
         selectedBorderButton = button
@@ -285,60 +318,27 @@ class Container: UIView, BorderButtonDelegate {
         /*
          Данные, которые нобходимо запомнить при первом касании к кнопке. Они понадобятся для расчётов далее, когда начнём двыгать палец.
          */
-        
         firstFrame = self.frame
+        firstTouchInSuperview = touch.location(in: self.superview!.superview)
+        firstTouchInSelf = touch.location(in: self)
+        firstVector = calculateVectorWith(firstTouchInSuperview)
+        firstVectorAngle = angleForVectorFromCenterTo(firstTouchInSuperview)
         
-        firstTouchLocation = touch.location(in: self.superview!.superview)
-        firstVectorAngle = angleForVectorFromCenterTo(firstTouchLocation)
         mainTransform = self.superview!.transform
-        selfTransform = self.transform
+        
         borderButtonTransform = (borderButtons.firstObject as! BorderButton).transform
-        firstVector = calculateVectorWith(firstTouchLocation)
-    }
-    
-    private func calculateVectorWith(_ endPoint: CGPoint) -> CGPoint {
-        
-        var x: CGFloat = 0
-        var y: CGFloat = 0
-        
-        guard let button = selectedBorderButton else {
-            return CGPoint(x: x, y: y)
-        }
-        
-        switch button.position {
-            
-        /*
-         Круглые кнопки (rotate, scale).
-         */
-        case .topLeft, .topRight, .bottomLeft, .bottomRight:
-            x = endPoint.x - self.superview!.center.x
-            y = endPoint.y - self.superview!.center.y
-            break
-            
-        /*
-         Квадратные кнопки (width, height).
-         */
-        case .centerRight:
-            x = endPoint.x - self.superview!.frame.origin.x
-            y = endPoint.y - self.superview!.frame.origin.y
-            break
-            
-        default:
-            break
-        }
-        
-        return CGPoint(x: x, y: y)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         let touch: UITouch = touches.first!
-        let currentLocation = touch.location(in: self.superview!.superview)
         
         /*
          Обработка для круглых кнопок (scale, rotate).
          */
         if selectedBorderButton != nil && selectedBorderButton?.style == .circle && isInstalled == false && state == .active {
+            
+            let currentLocation = touch.location(in: self.superview!.superview)
             
             /*
              Считаем векторы.
@@ -349,12 +349,12 @@ class Container: UIView, BorderButtonDelegate {
             let secondVectorLenght = sqrt(secondVector.x * secondVector.x + secondVector.y * secondVector.y)
             
             /*
-             Считаем угл между первым и вторым вектором. Так мы узнаем на сколько нужно повернуть картинку.
+             Считаем угл между первым и вторым вектором. Так мы узнаем на сколько нужно cкейлить картинку.
              */
             let deltaScale = secondVectorLenght / firstVectorLenght
             
             /*
-             Считаем разницу в длинне между первым и вторым вектором. Так мы узнаем на сколько нужно cкейлить картинку.
+             Считаем разницу между углом первого и второго вектора. Так мы узнаем на сколько нужно повернуть картинку.
              */
             let secondVectorAngle = angleForVectorFromCenterTo(currentLocation)
             let deltaRotate = secondVectorAngle - firstVectorAngle
@@ -368,7 +368,7 @@ class Container: UIView, BorderButtonDelegate {
             self.superview!.transform = transformScale
             
             /*
-             Отменяем скейл для кнопок потому, что они не должны увеличиватся вместе с картинкой. По сути - просто инвертируем скейла delta.
+             Отменяем скейл для кнопок потому, что они не должны увеличиваться вместе с картинкой. По сути - просто инвертируем скейла delta.
              */
             let deltaScaleInverted = firstVectorLenght / secondVectorLenght
             
@@ -377,6 +377,8 @@ class Container: UIView, BorderButtonDelegate {
             }
             
             drawLineFromPoint(start: firstVector, toPoint: secondVector, ofColor: UIColor.yellow, inView: self)
+            drawLineFromPoint(start: self.center, toPoint: firstVector, ofColor: UIColor.red, inView: self)
+            drawLineFromPoint(start: self.center, toPoint: secondVector, ofColor: UIColor.green, inView: self)
             
             return
         }
@@ -385,80 +387,20 @@ class Container: UIView, BorderButtonDelegate {
          Обработка для квадратных кнопок (height, width).
          */
         if selectedBorderButton != nil && selectedBorderButton?.style == .square && isInstalled == false && state == .active {
-            
-            /*
-             Считаем векторы.
-             */
-            let firstVectorLenght = sqrt(firstVector.x * firstVector.x + firstVector.y * firstVector.y)
-
-            let secondVector = calculateVectorWith(currentLocation)
-            let secondVectorLenght = sqrt(secondVector.x * secondVector.x + secondVector.y * secondVector.y)
-            
-            let deltaDistance = secondVectorLenght - firstVectorLenght
-            
-//            self.frame = CGRect(x: firstFrame.origin.x, y: firstFrame.origin.y, width: firstFrame.width + deltaDistance, height: firstFrame.height)
-//
-//            recalculateBorderPosition()
-            
-            //
-            
-            let deltaScale = secondVectorLenght / firstVectorLenght
-            
-            let transformTranslation = selfTransform.translatedBy(x: -deltaScale, y: 0)
-            let transformScale = transformTranslation.scaledBy(x: deltaScale, y: 1)
-            
-            self.transform = transformScale
-            
-            /*
-             Отменяем скейл для кнопок потому, что они не должны увеличиватся вместе с картинкой. По сути - просто инвертируем скейла delta.
-             */
-            let deltaScaleInverted = firstVectorLenght / secondVectorLenght
-            
-            for button in borderButtons {
-                (button as! BorderButton).transform = borderButtonTransform.scaledBy(x: deltaScaleInverted, y: deltaScaleInverted)
-            }
-            
-            drawLineFromPoint(start: firstVector, toPoint: secondVector, ofColor: UIColor.yellow, inView: self)
-            
-            return
-        }
-    }
     
-    // MARK: - UIGestureRecognizer
-    @objc func pinch(_ gesture: UIPinchGestureRecognizer) {
-        
-        /*
-         Пока отключил. Проблема в том, что тут нужно реализовать прямо пропорциональный скейл BorderButton's, чтобы они всегда были одного размера. Это уже реализовано, но не тут.
-         */
-        
-        //        if let view = gesture.view {
-        //
-        //            switch gesture.state {
-        //            case .changed:
-        //                let pinchCenter = CGPoint(x: gesture.location(in: view).x - view.bounds.midX,
-        //                                          y: gesture.location(in: view).y - view.bounds.midY)
-        //
-        //                let translate = mainTransform.translatedBy(x: pinchCenter.x, y: pinchCenter.y)
-        //                let scale = translate.scaledBy(x: gesture.scale, y: gesture.scale)
-        //                let compensationTranslate = scale.translatedBy(x: -pinchCenter.x, y: -pinchCenter.y)
-        //                mainTransform = compensationTranslate
-        //                self.superview!.transform = mainTransform
-        //
-        //                for button in borderButtons {
-        //                    (button as! BorderButton).transform = borderButtonTransform.scaledBy(x: -gesture.scale, y: -gesture.scale)
-        //                }
-        //
-        //                gesture.scale = 1
-        //                print("msg___ scale: \(gesture.scale) ")
-        //            default:
-        //                return
-        //            }
-        //        }
+            let touch = touches.first
+            let endPosition = touch?.location(in: self)
+            let difference = endPosition!.x - firstTouchInSelf.x
+            let newFrame = CGRect(x: firstFrame.origin.x, y: firstFrame.origin.y, width: firstFrame.size.width + difference, height: firstFrame.height)
+            self.frame = newFrame
+            
+            recalculateBorderPosition()
+        }
     }
     
     func drawLineFromPoint(start : CGPoint, toPoint end:CGPoint, ofColor lineColor: UIColor, inView view:UIView) {
         
-        if bezierPaths.count > 10 {
+        if bezierPaths.count > 4 {
             let object: CAShapeLayer = bezierPaths.object(at: 0) as! CAShapeLayer
             object.removeFromSuperlayer()
             bezierPaths.removeObject(at: 0)

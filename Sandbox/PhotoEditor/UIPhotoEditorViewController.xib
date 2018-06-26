@@ -13,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UIPhotoEditorViewController" customModule="Sandbox" customModuleProvider="target">
             <connections>
                 <outlet property="aScrollView" destination="SRf-bC-oPH" id="FvL-9y-nzy"/>
+                <outlet property="aView" destination="EcJ-Ba-awp" id="B7R-7B-V7S"/>
                 <outlet property="imageView" destination="XGz-wN-TnB" id="IvW-MD-p7J"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -29,6 +30,17 @@
                 <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XGz-wN-TnB">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </imageView>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EcJ-Ba-awp">
+                    <rect key="frame" x="137" y="54" width="100" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="LayerImage.png" translatesAutoresizingMaskIntoConstraints="NO" id="qDA-YK-SZW">
+                            <rect key="frame" x="0.0" y="0.0" width="100" height="50"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.77422591740000002" green="0.82077838299999994" blue="0.80284188649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -45,4 +57,7 @@
             <point key="canvasLocation" x="34.5" y="53.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="LayerImage.png" width="231" height="218"/>
+    </resources>
 </document>

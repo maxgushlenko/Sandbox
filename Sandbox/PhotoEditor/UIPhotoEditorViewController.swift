@@ -12,6 +12,7 @@ class UIPhotoEditorViewController: UIViewController, UIScrollViewDelegate, UIGes
 
     @IBOutlet var imageView : UIImageView!
     @IBOutlet var aScrollView : UIScrollView!
+    @IBOutlet var aView: UIView!
     
     var layerObject: LayerObject!
     
@@ -35,6 +36,8 @@ class UIPhotoEditorViewController: UIViewController, UIScrollViewDelegate, UIGes
         scrollViewTapGestureRecognizer.cancelsTouchesInView = false
         scrollViewTapGestureRecognizer.delegate = self
         aScrollView.addGestureRecognizer(scrollViewTapGestureRecognizer)
+        
+        aView.frame = CGRect(x: aView.frame.origin.x, y: aView.frame.origin.y, width: -100, height: aView.frame.size.height)
     }
 
     override func didReceiveMemoryWarning() {
