@@ -7,22 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0FA8228D2180E18600D3A220 /* UIAnimatedLikeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA8228C2180E18600D3A220 /* UIAnimatedLikeView.swift */; };
+		0F0E53C12278E4CF0063E85A /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F0E53C02278E4CF0063E85A /* ViewController.xib */; };
+		0F0E53C32278E5F40063E85A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F0E53C22278E5F40063E85A /* Default-568h@2x.png */; };
 		254C19C920D7D49F00387D0E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254C19C820D7D49F00387D0E /* AppDelegate.swift */; };
 		254C19CB20D7D49F00387D0E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254C19CA20D7D49F00387D0E /* ViewController.swift */; };
-		254C19CE20D7D49F00387D0E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 254C19CC20D7D49F00387D0E /* Main.storyboard */; };
 		254C19D020D7D4A000387D0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 254C19CF20D7D4A000387D0E /* Assets.xcassets */; };
-		254C19D320D7D4A000387D0E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 254C19D120D7D4A000387D0E /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0FA8228C2180E18600D3A220 /* UIAnimatedLikeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAnimatedLikeView.swift; sourceTree = "<group>"; };
+		0F0E53C02278E4CF0063E85A /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
+		0F0E53C22278E5F40063E85A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		254C19C520D7D49F00387D0E /* Sandbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sandbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		254C19C820D7D49F00387D0E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		254C19CA20D7D49F00387D0E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		254C19CD20D7D49F00387D0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		254C19CF20D7D4A000387D0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		254C19D220D7D4A000387D0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		254C19D420D7D4A000387D0E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		32DBE957B8993D9B8C9D4568 /* Pods_Sandbox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sandbox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A6CD1BA7535A8900C66E169 /* Pods-Sandbox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sandbox.release.xcconfig"; path = "Target Support Files/Pods-Sandbox/Pods-Sandbox.release.xcconfig"; sourceTree = "<group>"; };
@@ -43,6 +41,7 @@
 		254C19BC20D7D49F00387D0E = {
 			isa = PBXGroup;
 			children = (
+				0F0E53C22278E5F40063E85A /* Default-568h@2x.png */,
 				254C19C720D7D49F00387D0E /* Sandbox */,
 				254C19C620D7D49F00387D0E /* Products */,
 				3C6B6C0F989E85F1D372A432 /* Pods */,
@@ -63,10 +62,8 @@
 			children = (
 				254C19C820D7D49F00387D0E /* AppDelegate.swift */,
 				254C19CA20D7D49F00387D0E /* ViewController.swift */,
-				254C19CC20D7D49F00387D0E /* Main.storyboard */,
-				0FA8228C2180E18600D3A220 /* UIAnimatedLikeView.swift */,
+				0F0E53C02278E4CF0063E85A /* ViewController.xib */,
 				254C19CF20D7D4A000387D0E /* Assets.xcassets */,
-				254C19D120D7D4A000387D0E /* LaunchScreen.storyboard */,
 				254C19D420D7D4A000387D0E /* Info.plist */,
 			);
 			path = Sandbox;
@@ -122,6 +119,7 @@
 				TargetAttributes = {
 					254C19C420D7D49F00387D0E = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
@@ -148,9 +146,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				254C19D320D7D4A000387D0E /* LaunchScreen.storyboard in Resources */,
+				0F0E53C12278E4CF0063E85A /* ViewController.xib in Resources */,
 				254C19D020D7D4A000387D0E /* Assets.xcassets in Resources */,
-				254C19CE20D7D49F00387D0E /* Main.storyboard in Resources */,
+				0F0E53C32278E5F40063E85A /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,30 +186,10 @@
 			files = (
 				254C19CB20D7D49F00387D0E /* ViewController.swift in Sources */,
 				254C19C920D7D49F00387D0E /* AppDelegate.swift in Sources */,
-				0FA8228D2180E18600D3A220 /* UIAnimatedLikeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		254C19CC20D7D49F00387D0E /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				254C19CD20D7D49F00387D0E /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		254C19D120D7D4A000387D0E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				254C19D220D7D4A000387D0E /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		254C19D520D7D4A000387D0E /* Debug */ = {
@@ -337,7 +315,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6759UELELZ;
 				INFOPLIST_FILE = Sandbox/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -345,8 +323,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = test.git.Sandbox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -359,7 +337,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6759UELELZ;
 				INFOPLIST_FILE = Sandbox/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -367,8 +345,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = test.git.Sandbox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
